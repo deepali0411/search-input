@@ -5,6 +5,7 @@ import UserCard from "../components/userCard/UserCard";
 import { getFilteredData } from "../helpers";
 
 import styles from "./searchInput.module.scss";
+import EmptyCard from "../components/emptyCard/EmptyCard";
 
 const SearchInput = ({ userData }) => {
   const [searchValue, setSearchValue] = useState("");
@@ -87,9 +88,13 @@ const SearchInput = ({ userData }) => {
           onKeyDown={handleKeyChange}
         />
       </div>
-      <div className={styles.card} ref={listRef}>
-        {renderCards}
-      </div>
+      {filteredData.length ? (
+        <div className={styles.card} ref={listRef}>
+          {renderCards}
+        </div>
+      ) : (
+        <EmptyCard />
+      )}
     </div>
   );
 };
