@@ -1,0 +1,25 @@
+.container {
+  width: 100%;
+  .id {
+    font-weight: 600;
+  }
+  .name {
+    font-style: italic;
+    color: #444;
+    font-size: 1.4rem;
+    margin: 0.4rem 0 0.8rem 0;
+  }
+  .found {
+    font-size: 1.2rem;
+    color: #666;
+    .foundItem {
+      color: #0069c2;
+      margin-right: 0.8rem;
+      font-size: 1.4rem;
+    }
+  }
+  .address {
+    font-size: 1.4rem;
+    color: #888;
+  }
+}
