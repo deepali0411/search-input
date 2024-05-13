@@ -12,6 +12,7 @@ const SearchInput = ({ userData }) => {
   const [filteredData, setFilteredData] = useState([]);
   const [focused, setfocused] = useState(-1);
   const [isMouseEnter, setIsMouseEnter] = useState(false);
+  const [showEmptyCard, setShowEmptyCard] = useState(false);
 
   const listRef = useRef(null);
 
@@ -27,8 +28,10 @@ const SearchInput = ({ userData }) => {
   const handleChange = (e) => {
     const value = e.target.value;
     setSearchValue(value);
-    if (value === "") setFilteredData([]);
-    else {
+    if (value === "") {
+      setFilteredData([]);
+      setShowEmptyCard(true);
+    } else {
       const data = getFilteredData(value, userData);
       setFilteredData(data);
       setfocused(-1);
@@ -88,13 +91,12 @@ const SearchInput = ({ userData }) => {
           onKeyDown={handleKeyChange}
         />
       </div>
-      {filteredData.length ? (
+      {filteredData.length && (
         <div className={styles.card} ref={listRef}>
           {renderCards}
         </div>
-      ) : (
-        <EmptyCard />
       )}
+      {showEmptyCard && <EmptyCard />}
     </div>
   );
 };
