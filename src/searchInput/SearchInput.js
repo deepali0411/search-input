@@ -12,7 +12,6 @@ const SearchInput = ({ userData }) => {
   const [filteredData, setFilteredData] = useState([]);
   const [focused, setfocused] = useState(-1);
   const [isMouseEnter, setIsMouseEnter] = useState(false);
-  const [showEmptyCard, setShowEmptyCard] = useState(false);
 
   const listRef = useRef(null);
 
@@ -23,18 +22,18 @@ const SearchInput = ({ userData }) => {
       const scrollOffset = focused * itemHeight;
       listRef.current.scrollTop = scrollOffset;
     }
-  }, [focused]);
+  }, [focused, isMouseEnter]);
 
   const handleChange = (e) => {
     const value = e.target.value;
     setSearchValue(value);
     if (value === "") {
       setFilteredData([]);
-      setShowEmptyCard(true);
     } else {
       const data = getFilteredData(value, userData);
       setFilteredData(data);
       setfocused(-1);
+      setIsMouseEnter(true);
     }
   };
 
@@ -57,16 +56,17 @@ const SearchInput = ({ userData }) => {
     }
   };
 
-  const handleMouseEnter = (e, index) => {
-    setIsMouseEnter(true);
-    setfocused(index);
+  const handleMouseEnter = (e, index, isMouseEnter) => {
+    e.preventDefault();
+    if (isMouseEnter) setfocused(index);
   };
 
   const renderCards = useMemo(() => {
     return filteredData.map((data, index) => {
       return (
         <div
-          onMouseEnter={(e) => handleMouseEnter(e, index)}
+          onMouseEnter={(e) => handleMouseEnter(e, index, isMouseEnter)}
+          onMouseMove={() => setIsMouseEnter(true)}
           key={data?.id}
           className={cx(styles.userCard, {
             [styles.focus]: focused === index,
@@ -77,7 +77,7 @@ const SearchInput = ({ userData }) => {
         </div>
       );
     });
-  }, [filteredData, searchValue, focused]);
+  }, [filteredData, searchValue, focused, isMouseEnter]);
 
   return (
     <div className={styles.container}>
@@ -96,7 +96,7 @@ const SearchInput = ({ userData }) => {
           {renderCards}
         </div>
       )}
-      {showEmptyCard && <EmptyCard />}
+      {!filteredData.length && searchValue && <EmptyCard />}
     </div>
   );
 };
